@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Web Learning Journey</title>
+  <link rel="stylesheet" href="/CSS/style.css">
+</head>
+<body>
+
+  <!-- Header Section -->
+  <header class="header">
+    <h1>My Web Learning Journey</h1>
+   
+  </header>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <a href="#html">HTML</a>
+    <a href="#css">CSS</a>
+    <a href="#flexbox">Flexbox</a>
+  </nav>
+
+  <!-- HTML Section -->
+  <section id="html" class="section">
+    <h2>HTML Basics</h2>
+    <p>HTML (HyperText Markup Language) structures web pages using elements like headings, paragraphs, lists, and images.</p>
+
+    <h3>Headings Example</h3>
+    <h1>Main Title (h1)</h1>
+    <h2>Subheading (h2)</h2>
+    <h3>Small Heading (h3)</h3>
+
+    <h3>Paragraph and Text Formatting</h3>
+    <p>This is a normal paragraph. <strong>This is bold text.</strong> <em>This is italic text.</em></p>
+
+    <h3>Lists</h3>
+    <ul>
+      <li>HTML Structure</li>
+      <li>HTML Tags</li>
+      <li>HTML Elements</li>
+    </ul>
+
+    <h3>Links and Images</h3>
+    <p>Visit <a href="https://www.google.com" target="_blank">Google</a></p>
+    <img src="https://via.placeholder.com/200" alt="Sample image">
+  </section>
+
+  <!-- CSS Section -->
+  <section id="css" class="section">
+    <h2>CSS Styling</h2>
+    <p>CSS (Cascading Style Sheets) is used to style web pages — changing colors, fonts, spacing, and layout.</p>
+
+    <h3>Colors and Fonts Example</h3>
+    <p class="colored-text">This text shows CSS color and font properties.</p>
+
+    <h3>Box Model Example</h3>
+    <div class="box">This is a styled box using margin, padding, and border.</div>
+  </section>
+
+  <!-- Flexbox Section -->
+  <section id="flexbox" class="section">
+    <h2>CSS Flexbox Layout</h2>
+    <p>Flexbox helps align and distribute elements easily, creating responsive and clean layouts.</p>
+
+    <div class="flex-container">
+      <div class="flex-item">Box 1</div>
+      <div class="flex-item">Box 2</div>
+      <div class="flex-item">Box 3</div>
+    </div>
+  </section>
+
+  <!-- Financial Management Section -->
+  <section id="financial-management" class="section">
+    <h2>Financial Management</h2>
+    <div class="income-section">
+      <h3>Income</h3>
+      <input type="text" id="incomeSource" placeholder="Source of Income">
+      <input type="number" id="incomeAmount" placeholder="Amount">
+      <button id="addIncome">Add Income</button>
+    </div>
+    <div class="expenses-section">
+      <h3>Expenses</h3>
+      <input type="text" id="expenseSource" placeholder="Source of Expense">
+      <input type="number" id="expenseAmount" placeholder="Amount">
+      <button id="addExpense">Add Expense</button>
+    </div>
+    <div class="summary-section">
+      <h3>Summary</h3>
+      <p>Total Income: <span id="totalIncome">0</span></p>
+      <p>Total Expenses: <span id="totalExpenses">0</span></p>
+      <p>Net Balance: <span id="netBalance">0</span></p>
+    </div>
+  </section>
+
+  <script src="../Javascript/script.js"></script>
+</body>
+</html>
