@@ -1,0 +1,344 @@
+/* --- src/App.css --- */
+
+/* 1. Fonts & Reset */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+/* 2. Global Variables */
+:root {
+    --bg-dark: #0f172a;       /* Deep Slate Background */
+    --card-bg: rgba(30, 41, 59, 0.7); /* Glassy Card */
+    --border: rgba(255, 255, 255, 0.08);
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    
+    /* Brand Colors */
+    --primary: #818cf8;       /* Indigo 400 */
+    --primary-hover: #6366f1; /* Indigo 500 */
+    
+    /* Semantic Colors */
+    --success: #10b981;       /* Emerald */
+    --danger: #ef4444;        /* Red */
+    --accent-blue: #38bdf8;
+    --accent-pink: #f472b6;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+/* 3. Animated Background Shapes */
+.background-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: -1;
+    overflow: hidden;
+    background: radial-gradient(circle at top left, #1e1b4b, #0f172a);
+}
+
+.shape {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(100px);
+    opacity: 0.4;
+    animation: float 15s infinite alternate ease-in-out;
+}
+
+.shape-1 { 
+    top: -10%; left: -10%; width: 600px; height: 600px; 
+    background: #4f46e5; 
+    animation-delay: 0s; 
+}
+.shape-2 { 
+    bottom: -10%; right: -10%; width: 500px; height: 500px; 
+    background: #db2777; 
+    animation-delay: -5s; 
+}
+.shape-3 { 
+    top: 40%; left: 30%; width: 400px; height: 400px; 
+    background: #0ea5e9; 
+    animation-delay: -10s; 
+}
+
+@keyframes float {
+    0% { transform: translate(0, 0) scale(1); }
+    100% { transform: translate(20px, 20px) scale(1.05); }
+}
+
+/* 4. Main Layout Container (FULL SCREEN FIX) */
+.container { 
+    width: 100vw;          /* Force full viewport width */
+    max-width: 100%;       /* Remove any pixel limits */
+    margin: 0; 
+    padding: 20px 40px;    /* Breathing room on edges */
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+
+/* 5. Authentication Page (Centered & Isolated) */
+.auth-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 100;
+    background: radial-gradient(circle at center, #1e1b4b 0%, #0f172a 100%);
+    overflow: hidden;
+}
+
+/* Shapes inside Auth Page */
+.auth-container .shape {
+    z-index: -1;
+    opacity: 0.6;
+}
+
+.auth-card {
+    background: rgba(30, 41, 59, 0.6);
+    backdrop-filter: blur(24px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 48px;
+    border-radius: 24px;
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: fadeIn 0.8s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 30px;
+    color: white;
+}
+
+.auth-toggle {
+    margin-top: 24px;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    font-size: 14px;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    transition: color 0.2s;
+}
+.auth-toggle:hover { color: var(--primary); }
+
+/* 6. Navigation Bar */
+.header {
+    background: rgba(30, 41, 59, 0.4);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border: 1px solid var(--border);
+    margin-bottom: 30px;
+    width: 100%;
+}
+
+.nav-group { display: flex; align-items: center; gap: 8px; }
+
+.nav-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 16px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+}
+.nav-btn.active { background: rgba(129, 140, 248, 0.1); color: var(--primary); }
+.nav-btn:hover:not(.active) { color: var(--text-main); background: rgba(255,255,255,0.03); }
+
+.logout-btn { color: var(--danger); }
+.logout-btn:hover { background: rgba(239, 68, 68, 0.1); }
+
+/* 7. Dashboard Components */
+
+/* Stats Grid - FIXED TO 3 COLUMNS */
+.stats-grid { 
+    display: grid; 
+    grid-template-columns: 1fr 1fr 1fr; /* Strict 3 columns */
+    gap: 24px; 
+    margin-bottom: 30px; 
+    width: 100%;
+}
+
+.stat-card {
+    padding: 24px;
+    border-radius: 20px;
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    border: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    transition: transform 0.2s;
+}
+.stat-card:hover { transform: translateY(-2px); border-color: rgba(255,255,255,0.2); }
+
+.stat-content h3 { font-size: 14px; color: var(--text-muted); font-weight: 500; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.stat-content .amount { font-size: 32px; font-weight: 700; letter-spacing: -0.5px; }
+
+.icon-box {
+    width: 48px; height: 48px;
+    border-radius: 14px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+}
+.icon-box.balance { background: rgba(129, 140, 248, 0.2); color: var(--primary); }
+.icon-box.income { background: rgba(16, 185, 129, 0.2); color: var(--success); }
+.icon-box.expense { background: rgba(239, 68, 68, 0.2); color: var(--danger); }
+
+/* Main Dashboard Grid - FIXED LAYOUT */
+.dashboard-layout { 
+    display: grid; 
+    grid-template-columns: 3.5fr 6.5fr; /* Chart takes 35% */
+    gap: 24px; 
+    margin-bottom: 30px; 
+    width: 100%;
+}
+
+/* 8. Common UI Elements */
+
+/* Cards */
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(16px);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 32px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.card h2 { font-size: 18px; font-weight: 600; margin-bottom: 24px; display: flex; align-items: center; gap: 10px; color: var(--text-main); }
+
+/* Chart Specifics */
+.chart-container {
+    min-height: 450px; /* Ensure chart box is tall enough */
+    justify-content: center;
+}
+.chart-wrapper {
+    flex: 1;
+    position: relative;
+    width: 100%;
+    min-height: 300px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Forms */
+.form-group { margin-bottom: 16px; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+
+label { display: block; font-size: 12px; color: var(--text-muted); margin-bottom: 6px; font-weight: 500; }
+
+input, select {
+    width: 100%;
+    padding: 12px 16px;
+    background: rgba(15, 23, 42, 0.6);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    color: var(--text-main);
+    font-size: 14px;
+    transition: 0.2s;
+    outline: none;
+}
+input:focus, select:focus { border-color: var(--primary); }
+
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: var(--primary);
+    border: none;
+    border-radius: 12px;
+    color: white;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: 0.2s;
+    margin-top: 10px;
+}
+.btn-primary:hover { background: var(--primary-hover); }
+
+/* Tables */
+.table-container { flex: 1; overflow-x: auto; }
+.transactions-table { width: 100%; border-collapse: collapse; }
+.transactions-table th { text-align: left; padding: 16px; color: var(--text-muted); font-size: 13px; font-weight: 500; border-bottom: 1px solid var(--border); }
+.transactions-table td { padding: 16px; font-size: 14px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+.transactions-table tr:last-child td { border-bottom: none; }
+
+.cat-badge { 
+    display: inline-flex; align-items: center; gap: 6px; 
+    padding: 6px 12px; background: rgba(255,255,255,0.05); 
+    border-radius: 20px; font-size: 12px; color: var(--text-muted);
+}
+
+.amount-text { font-weight: 600; font-family: 'Inter', sans-serif; }
+.text-success { color: var(--success); }
+.text-danger { color: var(--danger); }
+
+/* Buttons & Utilities */
+.action-btn { 
+    background: transparent; border: none; 
+    color: var(--text-muted); cursor: pointer; 
+    padding: 6px; border-radius: 6px; transition: 0.2s;
+}
+.action-btn:hover { background: rgba(239, 68, 68, 0.1); color: var(--danger); }
+
+.edit-btn-small { background: transparent; border: none; color: var(--text-muted); cursor: pointer; padding: 4px; }
+.edit-btn-small:hover { color: white; }
+
+.filter-btn { 
+    background: transparent; border: 1px solid var(--border); 
+    color: var(--text-muted); padding: 6px 16px; 
+    border-radius: 8px; cursor: pointer; margin-left: 10px; font-size: 13px;
+}
+.filter-btn.active { background: var(--primary); color: white; border-color: var(--primary); }
+
+/* 9. Responsive Adjustments */
+@media (max-width: 1200px) {
+    .stats-grid { grid-template-columns: 1fr; } /* Stack cards on mobile/tablet */
+    .dashboard-layout { grid-template-columns: 1fr; } /* Stack chart on form */
+    .container { padding: 15px; }
+    .chart-container { min-height: auto; padding-bottom: 40px; }
+}
