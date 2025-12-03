@@ -1,32 +1,79 @@
+// frontend/src/App.jsx - Updated to use Backend API
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import AuthPage from './components/AuthPage';
 import Dashboard from './components/Dashboard';
 import History from './components/History';
 import Navbar from './components/Navbar';
+
+import { authAPI, transactionAPI } from './services/api';
 import './App.css';
 
 function App() {
   const [user, setUser] = useState(JSON.parse(localStorage.getItem('finance_user')) || null);
-  const [initialBalance, setInitialBalance] = useState(() => parseFloat(localStorage.getItem('finance_initial_balance')) || 50000);
-  const [transactions, setTransactions] = useState(() => JSON.parse(localStorage.getItem('finance_transactions')) || []);
+  const [transactions, setTransactions] = useState([]);
+  const [loading, setLoading] = useState(false);
 
+  // Fetch transactions when user logs in
   useEffect(() => {
-    localStorage.setItem('finance_transactions', JSON.stringify(transactions));
-    localStorage.setItem('finance_initial_balance', initialBalance.toString());
-  }, [transactions, initialBalance]);
+    if (user) {
+      fetchTransactions();
+    }
+  }, [user]);
 
-  const addTransaction = (txn) => setTransactions([txn, ...transactions]);
-  
-  const deleteTransaction = (id) => {
-    if (window.confirm("Are you sure you want to delete this transaction?")) {
-      setTransactions(transactions.filter(t => t.id !== id));
+  const fetchTransactions = async () => {
+    try {
+      setLoading(true);
+      const data = await transactionAPI.getAll();
+      setTransactions(data.transactions);
+    } catch (error) {
+      console.error('Error fetching transactions:', error);
+      // If token is invalid, logout
+      if (error.message.includes('Authentication') || error.message.includes('Invalid')) {
+        handleLogout();
+      }
+    } finally {
+      setLoading(false);
     }
   };
 
-  const updateBalance = () => {
-    const newBal = prompt("Update Initial Balance (₹):", initialBalance);
-    if (newBal && !isNaN(newBal)) setInitialBalance(parseFloat(newBal));
+  const addTransaction = async (txn) => {
+    try {
+      const data = await transactionAPI.create(txn);
+      setTransactions([data.transaction, ...transactions]);
+      return data.transaction;
+    } catch (error) {
+      console.error('Error adding transaction:', error);
+      alert('Failed to add transaction: ' + error.message);
+      throw error;
+    }
+  };
+  
+  const deleteTransaction = async (id) => {
+    if (window.confirm("Are you sure you want to delete this transaction?")) {
+      try {
+        await transactionAPI.delete(id);
+        setTransactions(transactions.filter(t => t._id !== id));
+      } catch (error) {
+        console.error('Error deleting transaction:', error);
+        alert('Failed to delete transaction: ' + error.message);
+      }
+    }
+  };
+
+  const updateBalance = async () => {
+    const newBal = prompt("Update Initial Balance (₹):", user.initialBalance);
+    if (newBal && !isNaN(newBal)) {
+      try {
+        await authAPI.updateBalance(parseFloat(newBal));
+        const updatedUser = { ...user, initialBalance: parseFloat(newBal) };
+        setUser(updatedUser);
+        localStorage.setItem('finance_user', JSON.stringify(updatedUser));
+      } catch (error) {
+        console.error('Error updating balance:', error);
+        alert('Failed to update balance: ' + error.message);
+      }
+    }
   };
 
   const handleLogin = (userData) => {
@@ -37,9 +84,9 @@ function App() {
   const handleLogout = () => {
     localStorage.removeItem('finance_user');
     setUser(null);
+    setTransactions([]);
   };
 
-  // --- Fixed Full Screen Background ---
   const Background = () => (
     <div className="background-wrapper">
       <div className="shape shape-1"></div>
@@ -59,14 +106,19 @@ function App() {
           <Route path="/" element={user ? (
             <Dashboard 
               transactions={transactions} 
-              initialBalance={initialBalance}
+              initialBalance={user.initialBalance}
               onAdd={addTransaction}
               onDelete={deleteTransaction}
               onEditBalance={updateBalance}
+              loading={loading}
             />
           ) : <Navigate to="/login" />} />
           <Route path="/history" element={user ? (
-            <History transactions={transactions} onDelete={deleteTransaction} />
+            <History 
+              transactions={transactions} 
+              onDelete={deleteTransaction} 
+              loading={loading} 
+            />
           ) : <Navigate to="/login" />} />
         </Routes>
       </div>
